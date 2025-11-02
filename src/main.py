@@ -9,28 +9,6 @@ script_params_to_run_in_parallel = [
     (2000, 15),
     (2000, 20),
 ]
-# processes = []
-
-# print("🚀 Launching all processes in parallel...")
-# # Start all processes without waiting
-# for script_params in script_params_to_run_in_parallel:
-#     params = f"--epochs={script_params[0]} --randomness={script_params[1]}"
-#     command = [
-#         sys.executable,
-#         f"ctgan_generators_training.py {params};",
-#         f"ctgan_synthetic_generation.py {params};",
-#         f"lightgbm_evaluation.py {params}",
-#     ]
-#     # Popen starts the process and immediately moves on
-#     process = subprocess.Popen(command)
-#     processes.append(process)
-
-# print("⏳ All processes are running. Now waiting for them to complete...")
-# # Wait for all launched processes to finish
-# for p in processes:
-#     p.wait()
-
-# print("✅ All parallel processes have finished.")
 
 import os
 import subprocess
