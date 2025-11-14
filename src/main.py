@@ -1,5 +1,8 @@
-# import subprocess
-# import sys
+import os
+import subprocess
+import sys
+from concurrent.futures import ProcessPoolExecutor
+from utils.results_collector import ResultsCollector
 
 script_params_to_run_in_parallel = [
     (1000, 10),
@@ -10,21 +13,15 @@ script_params_to_run_in_parallel = [
     (2000, 20),
 ]
 
-import os
-import subprocess
-import sys
-from concurrent.futures import ProcessPoolExecutor
-from utils.results_collector import ResultsCollector
-
 EXPERIMENTS = [{
-        "name": f"Experiment 1: {params[0]} Epochs, {params[1]} Randomness",
-        "params": {"--epochs": params[0], "--randomness": params[1]},
+        "name": f"Experiment 1: {epochs} Epochs, {randomness} Randomness",
+        "params": {"--epochs": epochs, "--randomness": randomness},
         "scripts": [
             "ctgan_generators_training.py",
             "ctgan_synthetic_generation.py",
             "lightgbm_evaluation.py"
         ]
-    } for params in script_params_to_run_in_parallel
+    } for [epochs, randomness] in script_params_to_run_in_parallel
 ]
 
 def run_experiment_set(experiment):
