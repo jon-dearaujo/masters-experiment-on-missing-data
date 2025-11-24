@@ -17,8 +17,8 @@ collector.collect([
 
 
 try:
-    print(f"Reading from '../ObesityDataSet_raw_and_data_sinthetic.csv'...")
-    data_full = pd.read_csv('../ObesityDataSet_raw_and_data_sinthetic.csv')
+    print(f"Reading from '../ObesityDataSet_raw_and_data_synthetic.csv'...")
+    data_full = pd.read_csv('../ObesityDataSet_raw_and_data_synthetic.csv')
     print("CSV file loaded successfully. Shape:", data_full.shape)
 except Exception as e:
     print(f"Error reading the CSV file: {e}")

@@ -24,6 +24,54 @@ EXPERIMENTS = [{
     } for [epochs, randomness] in script_params_to_run_in_parallel
 ]
 
+'''
+explicar qualidade dos dados
+e qualidade dos modelos
+
+[caso o CESAR permita um trabalho em formato de paper em vez da dissertação]
+-- template ieee, coluna dupla.
+
+-- Executar Kolmogorov-Smirnov [KS] https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test
+-- simulação deve rodar 30x com 1000 épocas e 30x com 2000, extrair médias.
+
+Há uma melhora? não eh possível comprovar com 95% de confiança?
+ De fato, dados os resultados de Kolmogorov-Smirnov, a melhora preliminar se mantém?
+o que é a melhora?
+"objetivo -- substituir teoria por inferência causal -- aumento de épocas cria melhora substancial dados os resultados de KS test"
+
+REALIZAR revisão sistematica
+
+DOIS INDICADORES
+1. qualidade do sdmetrics
+2. melhora dos dados sintéticos
+
+2 tipos de gráficos para cada seção:
+gráfico de linha - media da qualidade época/época
+precisa normalizar 1000 com 2000
+
+boxplot - distribuição da métrica
+
+
+seção que explica synthetic data generation: VARs and GANs
+  - what are GANs?
+    - add images
+    - go deep on CTGAN
+
+- tell that researches used  Lightgbm for evaluation to justify why?
+
+dor oportunidade e qual minha proposta.
+
+add artigos no notebooklm e pergunta: insights e gaps.
+
+--- próximos passos ---
+
+1. gerar gráficos e melhora analise de resultados. Após isso, experimento concluído.
+2. concluir metodologia.
+3. concluir conclusão.
+4. finalizar resumo e introdução.
+5. finalizar revisão sistemática.
+'''
+
 def run_experiment_set(experiment):
     """Worker function to run one full, sequential set of scripts."""
     name = experiment['name']
