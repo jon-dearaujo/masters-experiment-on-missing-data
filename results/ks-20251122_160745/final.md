@@ -9,7 +9,7 @@
 3500 Epochs -> Mean K-S: 0.1593 (±0.0114)\
 4000 Epochs -> Mean K-S: 0.1578 (±0.0110)\
 4500 Epochs -> Mean K-S: 0.1604 (±0.0134)\
-5000 Epochs -> Mean K-S: 0.1545 (±0.0137)\
+5000 Epochs -> Mean K-S: 0.1545 (±0.0137)
 
 🧪 One-Way ANOVA Results:
    P-Value: 5.8233e-44\
