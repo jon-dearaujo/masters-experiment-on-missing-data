@@ -8,7 +8,7 @@ cycler==0.12.1
 deepecho==0.7.0
 Faker==37.8.0
 filelock==3.19.1
-fonttools==4.60.1
+fonttools==4.61.0
 fsspec==2025.9.0
 graphviz==0.21
 Jinja2==3.1.6
