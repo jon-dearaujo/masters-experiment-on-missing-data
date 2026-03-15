@@ -19,7 +19,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies from the project requirements
-COPY requirements.txt /tmp/requirements.txt
+COPY src/requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 # Default to running Python in unbuffered mode; script provided at runtime

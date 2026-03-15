@@ -22,4 +22,4 @@ One way to figure this, is by comparing the downstream accuracy using original u
 ## What Am I Trying To Answer?
 
 At the end, what is really in question here is:
-***How does "bad data" affect the ability of CTGAN (geneartive ai) to understand the inner structure of a dataset?***
+***How does "bad data" affect the ability of CTGAN (geneartive ai) to understand the inner structure of a dataset?*** This is answered by giving CTGAN bad data, let it train on it, sample new data, and see how this data affects the downstream classifier model, compared to CTGAN's data from a compelte model.
