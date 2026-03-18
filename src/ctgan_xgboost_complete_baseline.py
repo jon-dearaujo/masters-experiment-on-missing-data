@@ -103,6 +103,7 @@ def main():
 
         acc = run_iteration(X_train, y_train, X_test, y_test, num_classes)
         results_log.append({
+            'Missingness': 0.0,
             'Iteration': i,
             'Accuracy': acc,
         })
