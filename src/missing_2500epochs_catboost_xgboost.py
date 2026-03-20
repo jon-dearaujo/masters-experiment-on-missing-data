@@ -9,16 +9,34 @@ from sklearn.metrics import accuracy_score
 from catboost import CatBoostClassifier
 from xgboost import XGBClassifier
 import multiprocessing as mp
+import random
+from datetime import datetime
+
+try:
+    import torch
+except ImportError:  # pragma: no cover
+    torch = None
 
 # --- Configuration ---
-FIXED_EPOCHS = 2500  # alinhado ao script original
+FIXED_EPOCHS = 5000  # anteriormente 2500; atualizado para refletir melhor desempenho
 ITERATIONS = 30      # repeticoes para significância
 MISSINGNESS_LEVELS = [0.10, 0.20, 0.30, 0.40]
-RESULTS_FILE_CAT = "../results/final_missingness_catboost.csv"
-RESULTS_FILE_XGB = "../results/final_missingness_xgboost.csv"
+TIMESTAMP = datetime.now().strftime("%Y%m%d_%H%M%S")
+RESULTS_FILE_CAT = f"../results/{TIMESTAMP}_final_missingness_catboost.csv"
+RESULTS_FILE_XGB = f"../results/{TIMESTAMP}_final_missingness_xgboost.csv"
 DATA_PATH = '../ObesityDataSet_raw_and_data_synthetic.csv'
 TARGET_COL = 'NObeyesdad'
 WORKERS = 4  # run levels in parallel (one per level)
+
+
+def set_seed(seed: int) -> None:
+    random.seed(seed)
+    np.random.seed(seed)
+    if torch is not None:
+        torch.manual_seed(seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed(seed)
+            torch.cuda.manual_seed_all(seed)
 
 
 def apply_mcar_missingness(df, level, target_col):
@@ -31,7 +49,7 @@ def apply_mcar_missingness(df, level, target_col):
     return data
 
 
-def evaluate_catboost(synthetic_data, real_test_data, target_col):
+def evaluate_catboost(synthetic_data, real_test_data, target_col, seed: int):
     le = LabelEncoder()
     y_train = le.fit_transform(synthetic_data[target_col])
     y_test = le.transform(real_test_data[target_col])
@@ -50,6 +68,7 @@ def evaluate_catboost(synthetic_data, real_test_data, target_col):
     model = CatBoostClassifier(
         loss_function="MultiClass",
         verbose=False,
+        random_seed=seed,
     )
     model.fit(X_train, y_train, cat_features=cat_indices)
 
@@ -64,7 +83,7 @@ def _encode_for_xgb(train_df, test_df):
     return X_train, X_test
 
 
-def evaluate_xgboost(synthetic_data, real_test_data, target_col):
+def evaluate_xgboost(synthetic_data, real_test_data, target_col, seed: int):
     le = LabelEncoder()
     y_train = le.fit_transform(synthetic_data[target_col])
     y_test = le.transform(real_test_data[target_col])
@@ -81,6 +100,7 @@ def evaluate_xgboost(synthetic_data, real_test_data, target_col):
         eval_metric="mlogloss",
         use_label_encoder=False,
         verbosity=0,
+        seed=seed,
     )
     model.fit(X_train, y_train)
 
@@ -90,11 +110,13 @@ def evaluate_xgboost(synthetic_data, real_test_data, target_col):
 
 
 def _run_single_task(level, iteration):
+    set_seed(iteration)
     data_full = pd.read_csv(DATA_PATH)
 
     D_train, D_test = train_test_split(
         data_full,
         test_size=0.2,
+        random_state=iteration,
         stratify=data_full[TARGET_COL]
     )
 
@@ -108,8 +130,8 @@ def _run_single_task(level, iteration):
 
     S_incomplete = model.sample(len(D_train))
 
-    acc_cat = evaluate_catboost(S_incomplete, D_test, TARGET_COL)
-    acc_xgb = evaluate_xgboost(S_incomplete, D_test, TARGET_COL)
+    acc_cat = evaluate_catboost(S_incomplete, D_test, TARGET_COL, iteration)
+    acc_xgb = evaluate_xgboost(S_incomplete, D_test, TARGET_COL, iteration)
 
     return {
         'Missingness': level,
